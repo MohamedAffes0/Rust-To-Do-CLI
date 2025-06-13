@@ -9,10 +9,7 @@ pub enum CliCommand {
     /// Display the entire list.
     Display,
     /// Change an element's state.
-    Modify{
-        id: usize,
-        completed: bool
-    },
+    Modify(usize),
     /// Insert a new element.
     Insert(ToDo),
     /// Delete an element.
@@ -61,12 +58,7 @@ pub fn get_command() -> Result<CliCommand, CliError> {
             std::io::stdin().read_line(&mut id_input).expect("Failed to read line");
             let id_input: usize = id_input.trim().parse().expect("Invalid ID input");
 
-            println!("Enter the new state (true for completed, false for not completed):");
-            let mut state_input = String::new();
-            std::io::stdin().read_line(&mut state_input).expect("Failed to read line");
-            let completed: bool = state_input.trim().parse().expect("Invalid state input");
-
-            Ok(CliCommand::Modify { id: id_input, completed })
+            Ok(CliCommand::Modify (id_input))
         },
         "4" => {
             println!("Enter the title of the new item:");
@@ -126,9 +118,10 @@ impl CliCommand {
                 }
                 Ok(())
             },
-            CliCommand::Modify { id, completed } => {
-                todo_list.set_completed(id - 1, completed)?;
-                println!("Item {} has been marked as {}", id, if completed { "completed" } else { "not completed" });
+            CliCommand::Modify (id) => {
+                todo_list.toggle_completion(id - 1)?;
+                let todo = todo_list.get(id - 1)?;
+                println!("Item {} has been marked as {}", id, if todo.get_completion() { "completed" } else { "not completed" });
                 Ok(())
             },
             CliCommand::Insert(todo) => {

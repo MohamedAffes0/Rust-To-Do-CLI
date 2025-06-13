@@ -1,10 +1,12 @@
 use serde::{Serialize, Deserialize};
+use chrono::{DateTime, Local};
 
 #[derive(Serialize, Deserialize)]
 pub struct ToDo {
     title: String,
     description: String,
     completed: bool,
+    creation_date: DateTime<Local>,
 }
 
 pub enum Error {
@@ -25,13 +27,19 @@ impl ToDo {
         else if description.is_empty()  {
             Err(Error::EmptyField(EmptyFieldError::Description))
         }else {
-            Ok(ToDo {title, description, completed: false})
+            let now = Local::now();
+            Ok(ToDo {title, description, completed: false, creation_date: now })
         }
     }
 
-    pub fn set_completed(&mut self, completed: bool) {
-        self.completed = completed;
+    pub fn toggle_completion(&mut self) {
+        self.completed = !self.completed;
     }
+
+    pub fn get_completion(&self) -> bool {
+        self.completed
+    }
+
 }
 
 impl std::fmt::Display for ToDo {
@@ -39,10 +47,11 @@ impl std::fmt::Display for ToDo {
         let status_icon = if self.completed { "✅" } else { "❌" };
         write!(
             f,
-            "{} [{}]\n    {}\n",
+            "{} [{}]\n    {}\n    Created: {}\n",
             self.title,
             status_icon,
-            self.description
+            self.description,
+            self.creation_date.format("%Y-%m-%d %H:%M:%S")
         )
     }
 }

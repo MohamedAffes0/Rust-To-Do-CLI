@@ -34,10 +34,10 @@ impl ToDoList {
         self.0.len()
     }
 
-    pub fn set_completed(&mut self, id: usize, completed: bool) -> Result<(), Error> {
+    pub fn toggle_completion(&mut self, id: usize) -> Result<(), Error> {
         match self.0.get_mut(id) {
             Some(todo) => {
-                todo.set_completed(completed);
+                todo.toggle_completion();
                 Ok(())
             },
             None => Err(Error::IndexOutOfBounds)
