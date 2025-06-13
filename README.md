@@ -12,6 +12,7 @@ A lightweight, interactive command-line To-Do list manager written in Rust. This
 - ❌ Delete tasks by ID
 - 💾 Persistent data stored in `todo_data.json`
 - 🧩 Modular codebase with structured error handling
+- 🎛️ Interactive menu using [`inquire`](https://docs.rs/inquire)
 
 ---
 
@@ -61,80 +62,60 @@ cd Rust-To-Do-CLI
 cargo run
 ```
 ---
+### 📌 How It Works
+- Launches an interactive terminal menu
+
+- Select a command from a list of options
+
+- Input is validated; errors are handled gracefully
+
+- All changes are saved to `todo_data.json` after every operation
+---
 ## 🚀Examples
 Here are some example interactions to help you get started with the To-Do CLI application.
 
-### Example 1: Insert a new item
+### Insert a new task
 ```
 Please choose a command:
-1. Display an item
-2. Display the entire list
-3. Modify the state of an item
-4. Insert a new item
-5. Delete an item
-6. Exit
-Enter the command number: 4
+▸ Insert a new item
 Enter the title of the new item:
 Buy groceries
 Enter the description of the new item:
 Milk, eggs, bread
 Inserted: Buy groceries [❌]
     Milk, eggs, bread
+    Created: 2025-06-13 10:45:21
 ```
-### Example 2: Display the entire list
+### View all tasks
 ```
 Please choose a command:
-1. Display an item
-2. Display the entire list
-3. Modify the state of an item
-4. Insert a new item
-5. Delete an item
-6. Exit
-Enter the command number: 2
+▸ Display the entire list
 1: Buy groceries [❌]
     Milk, eggs, bread
+    Created: 2025-06-13 10:45:21
 ```
-### Example 3: Mark an item as completed
+### Mark a task as completed
 ```
 Please choose a command:
-1. Display an item
-2. Display the entire list
-3. Modify the state of an item
-4. Insert a new item
-5. Delete an item
-6. Exit
-Enter the command number: 3
+▸ Modify the state of an item
 Enter the ID of the item to modify:
 1
-Enter the new state (true for completed, false for not completed):
-true
 Item 1 has been marked as completed
 ```
-### Example 4: Display a specific item
+### View a specific task
 ```
 Please choose a command:
-1. Display an item
-2. Display the entire list
-3. Modify the state of an item
-4. Insert a new item
-5. Delete an item
-6. Exit
-Enter the command number: 1
+▸ Display an item
 Enter the ID of the item to display:
 1
 Buy groceries [✅]
     Milk, eggs, bread
+    Created: 2025-06-13 10:45:21
 ```
-### Example 5: Delete an item
+### Delete a task
 ```
 Please choose a command:
-1. Display an item
-2. Display the entire list
-3. Modify the state of an item
-4. Insert a new item
-5. Delete an item
-6. Exit
-Enter the command number: 5
+▸ Delete an item
 Enter the ID of the item to delete:
 1
 Deleted: Buy groceries [✅]
