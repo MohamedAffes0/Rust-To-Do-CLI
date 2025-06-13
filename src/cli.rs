@@ -1,7 +1,8 @@
 
 use crate::to_do::{ToDo, Error};
 use crate::to_do_list::ToDoList;
-use std::io::Write;
+// use std::io::Write;
+use inquire::Select;
 
 pub enum CliCommand {
     /// Display an element.
@@ -22,24 +23,29 @@ pub enum CliError {
     InvalidInput(Error),
 }
 
+
+/// Displays an interactive menu and returns the selected choice.
+fn menu(items: &[String]) -> String {
+    Select::new("Please choose a command:", items.to_vec())
+        .prompt()
+        .unwrap()
+}
+
 pub fn get_command() -> Result<CliCommand, CliError> {
-    println!("Please choose a command:");
-    println!("1. Display an item");
-    println!("2. Display the entire list");
-    println!("3. Modify the state of an item");
-    println!("4. Insert a new item");
-    println!("5. Delete an item");
-    println!("6. Exit");
 
-    print!("Enter the command number: ");
+    let options = vec![
+        String::from("Display an item"),
+        String::from("Display the entire list"),
+        String::from("Modify the state of an item"),
+        String::from("Insert a new item"),
+        String::from("Delete an item"),
+        String::from("Exit"),
+    ];
 
-    std::io::stdout().flush().unwrap();
-    let mut input = String::new();
-    std::io::stdin().read_line(&mut input).expect("Failed to read line");
-    let input = input.trim();
+    let choice = menu(&options);
 
-    match input {
-        "1" => {
+    match choice.as_str() {
+        "Display an item" => {
             println!("Enter the ID of the item to display:");
             let mut id_input = String::new();
             std::io::stdin().read_line(&mut id_input).expect("Failed to read line");
@@ -49,10 +55,10 @@ pub fn get_command() -> Result<CliCommand, CliError> {
             };
             Ok(CliCommand::Get(id_input))
         },
-        "2" => {
+        "Display the entire list" => {
             Ok(CliCommand::Display)
         },
-        "3" => {
+        "Modify the state of an item" => {
             println!("Enter the ID of the item to modify:");
             let mut id_input = String::new();
             std::io::stdin().read_line(&mut id_input).expect("Failed to read line");
@@ -60,7 +66,7 @@ pub fn get_command() -> Result<CliCommand, CliError> {
 
             Ok(CliCommand::Modify (id_input))
         },
-        "4" => {
+        "Insert a new item" => {
             println!("Enter the title of the new item:");
             let mut title_input = String::new();
             std::io::stdin().read_line(&mut title_input).expect("Failed to read line");
@@ -76,14 +82,14 @@ pub fn get_command() -> Result<CliCommand, CliError> {
                 Err(e) => Err(CliError::InvalidInput(e)), // Handle error appropriately
             }
         },
-        "5" => {
+        "Delete an item" => {
             println!("Enter the ID of the item to delete:");
             let mut id_input = String::new();
             std::io::stdin().read_line(&mut id_input).expect("Failed to read line");
             let id_input: usize = id_input.trim().parse().expect("Invalid ID input");
             Ok(CliCommand::Delete(id_input))
         },
-        "6" => {
+        "Exit" => {
             Ok(CliCommand::Exit)
         },
         _ => {
