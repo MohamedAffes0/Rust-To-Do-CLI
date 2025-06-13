@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize)]
 pub struct ToDo {
     title: String,
     description: String,
@@ -9,7 +9,6 @@ pub struct ToDo {
 
 pub enum Error {
     EmptyField(EmptyFieldError),
-    // MaxReached,
     IndexOutOfBounds
 }
 
@@ -55,7 +54,6 @@ impl std::fmt::Display for Error {
                 EmptyFieldError::Title => write!(f, "Title cannot be empty."),
                 EmptyFieldError::Description => write!(f, "Description cannot be empty."),
             },
-            // Error::MaxReached => write!(f, "Maximum number of ToDos reached."),
             Error::IndexOutOfBounds => write!(f, "Index out of bounds."),
         }
     }

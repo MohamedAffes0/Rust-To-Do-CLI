@@ -101,10 +101,10 @@ pub fn get_command() -> Result<CliCommand, CliError> {
 }
 
 impl CliCommand {
-    pub fn execute(&self, todo_list: &mut ToDoList) -> Result<(), Error> {
+    pub fn execute(self, todo_list: &mut ToDoList) -> Result<(), Error> {
         match self {
             CliCommand::Get(id) => {
-                let todo = todo_list.get(*id - 1)?;
+                let todo = todo_list.get(id - 1)?;
                 println!("{}", todo);
                 Ok(())
             },
@@ -127,17 +127,17 @@ impl CliCommand {
                 Ok(())
             },
             CliCommand::Modify { id, completed } => {
-                todo_list.set_completed(*id - 1, *completed)?;
-                println!("Item {} has been marked as {}", id, if *completed { "completed" } else { "not completed" });
+                todo_list.set_completed(id - 1, completed)?;
+                println!("Item {} has been marked as {}", id, if completed { "completed" } else { "not completed" });
                 Ok(())
             },
             CliCommand::Insert(todo) => {
                 println!("Inserted: {}", todo);
-                todo_list.add(todo.clone());
+                todo_list.add(todo);
                 Ok(())
             },
             CliCommand::Delete(id) => {
-                match todo_list.remove(*id - 1) {
+                match todo_list.remove(id - 1) {
                     Ok(todo) => {
                         println!("Deleted: {}", &todo);
                         Ok(())
