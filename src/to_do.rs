@@ -35,7 +35,14 @@ impl ToDo {
 
 impl std::fmt::Display for ToDo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "ToDo: {{ title: {}, description: {}, completed: {} }}", self.title, self.description, self.completed)
+        let status_icon = if self.completed { "✅" } else { "❌" };
+        write!(
+            f,
+            "{} [{}]\n    {}\n",
+            self.title,
+            status_icon,
+            self.description
+        )
     }
 }
 
